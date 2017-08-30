@@ -26,6 +26,9 @@ class Bit2cClient:
         self.nonce = int(time.time())
         self.Url = Url
 
+    def __nonce(self):
+        return int(time.time())
+
     def ComputeHash(self, message):
         sign = hashlib.sha512(message.encode("utf-8"))
         import base64
@@ -53,7 +56,7 @@ class Bit2cClient:
         
 
     def Balance(self):
-        qString = "nonce=" + str(self.nonce)
+        qString = "nonce=" + str(self.__nonce())
         sign = self.ComputeHash(qString)
         url = self.Url + "Account/Balance"
         response = self.Query(qString, url, sign)
@@ -111,7 +114,7 @@ class Bit2cClient:
         return orderBook
 
     def AddOrder(self, data):
-        qString = "Amount=" + str(data.Amount) + "&Price=" + str(data.Price) + "&Total=" + str(data.Total) + "&IsBid=" + str(data.IsBid) + "&Pair=" + str(data.Pair) + "&nonce=" + (str(int(time.time())))
+        qString = "Amount=" + str(data.Amount) + "&Price=" + str(data.Price) + "&Total=" + str(data.Total) + "&IsBid=" + str(data.IsBid) + "&Pair=" + str(data.Pair) + "&nonce=" + str(self.__nonce())
         sign = self.ComputeHash(qString)
         url = self.Url + "Order/AddOrder"
         response = self.Query(qString, url, sign)
@@ -139,7 +142,7 @@ class Bit2cClient:
         return addOrder
     
     def MyOrders(self, Pair):
-        qString = "pair=" + str(Pair) + "&nonce=" + (str(int(time.time())))
+        qString = "pair=" + str(Pair) + "&nonce=" + str(self.__nonce())
         sign = self.ComputeHash(qString)
         url = self.Url + "Order/MyOrders"
         response = self.Query(qString, url, sign)
@@ -173,7 +176,7 @@ class Bit2cClient:
         return orders
 
     def CancelOrder(self, id):
-        qString = "id=" + str(id) + "&nonce=" + (str(int(time.time())))
+        qString = "id=" + str(id) + "&nonce=" + str(self.__nonce())
         sign = self.ComputeHash(qString)
         url = self.Url + "Order/CancelOrder"
         response = self.Query(qString, url, sign)
@@ -189,7 +192,7 @@ class Bit2cClient:
                 self.CancelOrder(ask.id)      
                 
     def AccountHistory(self,  fromTime, toTime):
-        qString = "fromTime=" + fromTime + "&toTime=" + toTime + "&nonce=" + (str(int(time.time())))
+        qString = "fromTime=" + fromTime + "&toTime=" + toTime + "&nonce=" + str(self.__nonce())
         sign = self.ComputeHash(qString)
         url = self.Url + "Order/AccountHistory"
         response = self.Query(qString, url, sign)
@@ -213,7 +216,7 @@ class Bit2cClient:
         return accountRaws
 
     def CreateCheckout(self, data):
-        qString = "Price=" + str(data.Price) + "&Description=" + str(data.Description) + "&CoinType=" + str(data.CoinType) + "&ReturnURL=" + str(data.ReturnURL) + "&CancelURL=" + str(data.CancelURL) + "&NotifyByEmail=" + str(data.NotifyByEmail) + "&nonce=" + (str(int(time.time())))
+        qString = "Price=" + str(data.Price) + "&Description=" + str(data.Description) + "&CoinType=" + str(data.CoinType) + "&ReturnURL=" + str(data.ReturnURL) + "&CancelURL=" + str(data.CancelURL) + "&NotifyByEmail=" + str(data.NotifyByEmail) + "&nonce=" + str(self.__nonce())
         sign = self.ComputeHash(qString)
         url = self.Url + "Merchant/CreateCheckout"
         response = self.Query(qString, url, sign)
